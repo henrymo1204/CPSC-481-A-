@@ -41,17 +41,21 @@ function spot(i, j) {
     this.addNeightbors = function (grid) {
         var i = this.x;
         var j = this.y;
-        if (i < g_grid.wid - 1 && grid[i + 1][j] != null) {
-            this.neighbors.push(grid[i + 1][j]);
+        if (i + 1 < g_grid.wid && grid[j][i + 1] != null) {
+            this.neighbors.push(grid[j][i + 1]);
+            console.log("right")
         }
-        if (i > 0 && grid[i - 1][j] != null) {
-            this.neighbors.push(grid[i - 1][j]);
+        if (i - 1 > 0 && grid[j][i - 1] != null) {
+            this.neighbors.push(grid[j][i - 1]);
+            console.log("left")
         }
-        if (j < g_grid.hgt - 1 && grid[i][j + 1] != null) {
-            this.neighbors.push(grid[i][j + 1]);
+        if (j + 1 < g_grid.hgt && grid[j + 1][i] != null) {
+            this.neighbors.push(grid[j + 1][i]);
+            console.log("bot")
         }
-        if (i > 0 && grid[i][j - 1] != null) {
-            this.neighbors.push(grid[i][j - 1]);
+        if (j - 1 > 0 && grid[j - 1][i] != null) {
+            this.neighbors.push(grid[j - 1][i]);
+            console.log("top")
         }
     }
 }
@@ -160,7 +164,9 @@ function draw_sprite_in_cell( rsprite_id, rx, ry ) // wraps in x,y ifn.
     console.log("end draw_sprite_in_cell)");
     grid[ry][rx] = new spot(rx, ry);
     console.log(grid[ry][rx])
-    console.log(grid[0])
+    //for (var i = 0; i < grid.length; i++) {
+    //    console.log(grid[i])
+    //}
     if (rx == 5 && ry == 27) {
         for (var i = 0; i < grid[0].length; i++) {
             for (var j = 0; j < grid.length; j++) {
