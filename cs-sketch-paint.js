@@ -70,7 +70,7 @@ function removeFromArray(arr, elt) {
 function heuristic(a, b) { // f(n) = g(n) + h(n) ... Manhattan (TaxiCab)
     // Calculates the amount fo distance from start to end
     //var d = dist(start.i, start.j, end.i, end.j);
-    var d = (abs(a.i - b.i) + abs(a.j - b.j));
+    var d = (abs(a.x - b.x) + abs(a.y - b.y));
     return d;
 }
 
@@ -273,11 +273,12 @@ function draw()  // P5 Frame Re-draw Fcn, Called for Every Frame.
                 }
                 draw_bot(2, current.x, current.y);
                 console.log("Step Count = " + stepCount);
+                noLoop();
             }
+
 
             removeFromArray(openSet, current);
             closeSet.push(current);
-
             // Neighbor Code
             var neighbors = current.neighbors;
             for (var i = 0; i < neighbors.length; i++) {
