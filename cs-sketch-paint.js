@@ -168,8 +168,6 @@ function draw_sprite_in_cell( rsprite_id, rx, ry ) // wraps in x,y ifn.
     if (rx == 5 && ry == 27) {
         for (var i = 0; i < grid.length; i++) {
             for (var j = 0; j < grid[0].length; j++) {
-                console.log(i)
-                console.log(j)
                 if (grid[i][j] != null) {
                     grid[i][j].addNeightbors(grid);
                     console.log(grid[i][j]);
