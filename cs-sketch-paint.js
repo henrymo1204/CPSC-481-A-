@@ -165,9 +165,11 @@ function draw_sprite_in_cell( rsprite_id, rx, ry ) // wraps in x,y ifn.
     grid[ry][rx] = new spot(rx, ry);
     console.log(grid[ry][rx])
 
-    if (rx == 35 && ry == 27) {
-        for (var i = 0; i < grid[0].length; i++) {
-            for (var j = 0; j < grid.length; j++) {
+    if (rx == 5 && ry == 27) {
+        for (var i = 0; i < grid.length; i++) {
+            for (var j = 0; j < grid[0].length; j++) {
+                console.log(i)
+                console.log(j)
                 if (grid[i][j] != null) {
                     grid[i][j].addNeightbors(grid);
                     console.log(grid[i][j]);
@@ -175,8 +177,8 @@ function draw_sprite_in_cell( rsprite_id, rx, ry ) // wraps in x,y ifn.
             }
         }
 
-        start = grid[1][0];
-        end = grid[35][26];
+        start = grid[0][1];
+        end = grid[26][35];
 
         openSet.push(start);
     }
