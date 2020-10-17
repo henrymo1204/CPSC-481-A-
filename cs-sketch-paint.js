@@ -27,6 +27,7 @@ var openSet = [];
 var closeSet = [];
 var start;
 var end;
+var path;
 
 var g_l4job = { id: 1 }; // Put Lisp stuff f JS-to-access in ob; id to force ob.
 
@@ -37,6 +38,7 @@ function spot(i, j) {
     this.g = 0;
     this.h = 0;
     this.neighbors = [];
+    this.previous = null;
 
     this.addNeightbors = function (grid) {
         var i = this.x;
@@ -56,6 +58,7 @@ function spot(i, j) {
     }
 }
 
+// helper function
 function removeFromArray(arr, elt) {
     for (var i = arr.length - 1; i >= 0; i--) {
         if (arr[i] == elt) {
@@ -64,9 +67,10 @@ function removeFromArray(arr, elt) {
     }
 }
 
-function heuristic(start, end) {
+function heuristic(a, b) { // f(n) = g(n) + h(n) ... Manhattan (TaxiCab)
     // Calculates the amount fo distance from start to end
-    var d = dist(start.i, start.j, end.i, end.j);
+    //var d = dist(start.i, start.j, end.i, end.j);
+    var d = (abs(a.i - b.i) + abs(a.j - b.j));
     return d;
 }
 
@@ -95,9 +99,9 @@ function save_image( ) // btn
 
   //Also g_img_cell = loadImage( '10x10-sqr-RBY.png' );
 let g_img_stuff;
-  
+
 function get_images( )
-{ 
+{
     g_img_stuff = new Image( );
     g_img_stuff.src = "sprite-cells-28x28-a.png";
 }
@@ -138,7 +142,7 @@ var g_bot = { dir:3, x:20, y:20, color:100 }; // Dir is 0..7 clock, w 0 up.
 function get_sprite_by_id( rsprite_id ) // get sprite sheet x,y offsets obj.
 { // ID is a 0-based index; sprites are assumed to be grid cell size.
     // Sprite sheet is 2-elts 1-row, wall=0 and floor=1.
-    let id = rsprite_id % 2;
+    let id = rsprite_id % 4;
     let sprite_ob = { id: id, img: g_img_stuff };
     sprite_ob.sheet_pix_x = id * g_grid.cell_size;
     sprite_ob.sheet_pix_y = 0;
@@ -232,64 +236,76 @@ function move_bot_to_mouse( )
 
 function draw()  // P5 Frame Re-draw Fcn, Called for Every Frame.
 {
-    
+
     ++g_frame_cnt;
-    if (!g_stop
-        && mouseIsPressed
-        && (0 == g_frame_cnt % g_frame_mod))
+    if (!g_stop && (0 == g_frame_cnt % g_frame_mod))
     {
         //console.log( "p5 draw" );
         move_bot_to_mouse( );
         draw_update( );
     }
 
-    if (openSet.length > 0) {
-        // keep going
-        var lowestIndex = 0;
-        for (var i = 0; i < openSet.length; i++) {
-            if (openSet[i].f < openSet[lowestIndex].f) {
-                lowestIndex = i;
+        if (openSet.length > 0) {
+            // keep going
+            var lowestIndex = 0;
+            for (var i = 0; i < openSet.length; i++) {
+                if (openSet[i].f < openSet[lowestIndex].f) {
+                    lowestIndex = i;
+                }
             }
-        }
-        var current = openSet[lowestIndex];
-        console.log(current)
+            var current = openSet[lowestIndex];
+            console.log(current)
 
-        draw_bot(0, current.x, current.y);
+            draw_bot(0, current.x, current.y);
 
-        if (current == end) {
-            console.log("DONE!");
-        }
 
-        removeFromArray(openSet, current);
-        closeSet.push(current);
+            if (current == end) {
+                var stepCount = 0;
+                console.log("DONE!");
+                path = [];
+                var temp = current;
+                path.push(temp);
+                while (temp.previous) {
+                  path.push(temp.previous);
+                  temp = temp.previous;
+                  stepCount++;
+                  draw_bot(2, temp.x, temp.y);
+                }
+                draw_bot(2, current.x, current.y);
+                console.log("Step Count = " + stepCount);
+            }
 
-        // Neighbor Code
-        var neighbors = current.neighbors;
-        for (var i = 0; i < neighbors.length; i++) {
-            var neighbor = neighbors[i];
+            removeFromArray(openSet, current);
+            closeSet.push(current);
 
-            if (!closeSet.includes(neighbor)){
-                // Counting the amount of g/steps 
-                var tempSteps = current.g + 1;
+            // Neighbor Code
+            var neighbors = current.neighbors;
+            for (var i = 0; i < neighbors.length; i++) {
+                var neighbor = neighbors[i];
 
-                if (openSet.includes(neighbor)) {
-                    if (tempSteps < neighbor.g) {
-                        neighbor.g = tempSteps;
+                if (!closeSet.includes(neighbor)){
+                    // Counting the amount of g/steps
+                    var tempSteps = current.g + 1;
+
+                    if (openSet.includes(neighbor)) {
+                        if (tempSteps < neighbor.g) {
+                            neighbor.g = tempSteps;
+                        }
                     }
-                }
-                else {
-                    neighbor.g = tempSteps;
-                    openSet.push(neighbor);
-                }
+                    else {
+                        neighbor.g = tempSteps;
+                        openSet.push(neighbor);
+                    }
 
-                neighbor.h = heuristic(neighbor, end);
-                neighbor.f = neighbor.g + neighbor.h;
+                    neighbor.h = heuristic(neighbor, end);
+                    neighbor.f = neighbor.g + neighbor.h;
+                    neighbor.previous = current;
+                }
             }
         }
-    }
-    else {
-        // no solution
-    }
+        else {
+            // no solution
+        }
 
     // OBE:
     // Use JS Canvas's draw fcn, instead of P5's image(), to avoid CORS error.
@@ -321,8 +337,8 @@ function keyPressed( )
     }
 
     console.log( "p5 keyPressed: "
-                 // + ${key} + " " + ${keyCode} 
-                 + key + " " + keyCode 
+                 // + ${key} + " " + ${keyCode}
+                 + key + " " + keyCode
                  +  " g_sctrl = " + g_sctrl );
 
     console.log( "p5 keyPressed: post g_stop = " + g_stop );
