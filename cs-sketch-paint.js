@@ -68,6 +68,12 @@ function removeFromArray(arr, elt) {
     }
 }
 
+function heuristic(start, end) {
+    // Calculates the amount fo distance from start to end
+    var d = dist(start.i, start.j, end.i, end.j);
+    return d;
+}
+
 
 function do_btn( )
 { // grab code from csu\assets\js\js+p5+editbox
@@ -165,9 +171,11 @@ function draw_sprite_in_cell( rsprite_id, rx, ry ) // wraps in x,y ifn.
     grid[ry][rx] = new spot(rx, ry);
     console.log(grid[ry][rx])
 
-    if (rx == 5 && ry == 27) {
+    if (rx == 35 && ry == 27) {
         for (var i = 0; i < grid.length; i++) {
             for (var j = 0; j < grid[0].length; j++) {
+                console.log(i)
+                console.log(j)
                 if (grid[i][j] != null) {
                     grid[i][j].addNeightbors(grid);
                     console.log(grid[i][j]);
@@ -245,6 +253,29 @@ function draw()  // P5 Frame Re-draw Fcn, Called for Every Frame.
 
         removeFromArray(openSet, current);
         closeSet.push(current);
+
+        // Neighbor Code
+        var neighbors = current.neighbors;
+        for (var j = 0; i < neighbors.length; j++) {
+            var neighbor = neighbors[j];
+
+            if (!closeSet.includes(neighbor)){
+                // Counting the amount of g/steps 
+                var tempSteps = current.g + 1;
+
+                if (openSet.includes(neighbor)) {
+                    if (tempSteps < neighbor.g) {
+                        neighbor.g = tempSteps;
+                    }
+                } else {
+                    neighbor.g = tempSteps;
+                    openSet.push(neighbor);
+                }
+
+                neighbor.h = heuristic(neighbor, end);
+                neighbor.f = neighbor.g + neighbor.h;
+            }
+        }
     }
     else {
         // no solution
