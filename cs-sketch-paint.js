@@ -25,6 +25,8 @@ var g_tiles;
 var grid;
 var openSet = [];
 var closeSet = [];
+var start;
+var end;
 
 var g_l4job = { id: 1 }; // Put Lisp stuff f JS-to-access in ob; id to force ob.
 
@@ -34,7 +36,34 @@ function spot(i, j) {
     this.f = 0;
     this.g = 0;
     this.h = 0;
+    this.neighbors = [];
+
+    this.addNeightbors = function (grid) {
+        var i = this.x;
+        var j = this.y;
+        if (i < g_grid.wid - 1 && grid[i + 1][j] != null) {
+            this.neighbors.push(grid[i + 1][j]);
+        }
+        if (i > 0 && grid[i - 1][j] != null) {
+            this.neighbors.push(grid[i - 1][j]);
+        }
+        if (j < g_grid.hgt - 1 && grid[i][j + 1] != null) {
+            this.neighbors.push(grid[i][j + 1]);
+        }
+        if (i > 0 && grid[i][j - 1] != null) {
+            this.neighbors.push(grid[i][j - 1]);
+        }
+    }
 }
+
+function removeFromArray(arr, elt) {
+    for (var i = arr.length - 1; i >= 0; i--) {
+        if (arr[i] == elt) {
+            arr.splice(i, 1);
+        }
+    }
+}
+
 
 function do_btn( )
 { // grab code from csu\assets\js\js+p5+editbox
@@ -130,7 +159,23 @@ function draw_sprite_in_cell( rsprite_id, rx, ry ) // wraps in x,y ifn.
                      g_grid.cell_size, g_grid.cell_size );
     console.log("end draw_sprite_in_cell)");
     grid[ry][rx] = new spot(rx, ry);
-    console.log(grid[0]);
+    console.log(grid[ry][rx])
+    console.log(grid[0])
+    if (rx == 5 && ry == 27) {
+        for (var i = 0; i < grid[0].length; i++) {
+            for (var j = 0; j < grid.length; j++) {
+                if (grid[i][j] != null) {
+                    grid[i][j].addNeightbors(grid);
+                    console.log(grid[i][j]);
+                }
+            }
+        }
+
+        start = grid[1][0];
+        end = grid[35][26];
+
+        openSet.push(start);
+    }
 }
 // ==================================================
 // =================== END New Maze Drawing Code ========
@@ -178,6 +223,28 @@ function draw()  // P5 Frame Re-draw Fcn, Called for Every Frame.
         draw_update( );
     }
 
+    if (openSet.length > 0) {
+        // keep going
+        var lowestIndex = 0;
+        for (var i = 0; i < openSet.length; i++) {
+            if (openSet[i].f < openSet[lowestIndex].f) {
+                lowestIndex = i;
+            }
+        }
+
+        var current = openSet[lowestIndex];
+
+
+        if (current == end) {
+            console.log("DONE!");
+        }
+
+        removeFromArray(openSet, current);
+        closeSet.push(current);
+    }
+    else {
+        // no solution
+    }
 
     // OBE:
     // Use JS Canvas's draw fcn, instead of P5's image(), to avoid CORS error.
