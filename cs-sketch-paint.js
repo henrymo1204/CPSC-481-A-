@@ -164,10 +164,8 @@ function draw_sprite_in_cell( rsprite_id, rx, ry ) // wraps in x,y ifn.
     console.log("end draw_sprite_in_cell)");
     grid[ry][rx] = new spot(rx, ry);
     console.log(grid[ry][rx])
-    //for (var i = 0; i < grid.length; i++) {
-    //    console.log(grid[i])
-    //}
-    if (rx == 5 && ry == 27) {
+
+    if (rx == 35 && ry == 27) {
         for (var i = 0; i < grid[0].length; i++) {
             for (var j = 0; j < grid.length; j++) {
                 if (grid[i][j] != null) {
