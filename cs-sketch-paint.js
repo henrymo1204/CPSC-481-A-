@@ -245,68 +245,74 @@ function draw()  // P5 Frame Re-draw Fcn, Called for Every Frame.
         draw_update( );
     }
 
-        if (openSet.length > 0) {
-            // keep going
-            var lowestIndex = 0;
-            for (var i = 0; i < openSet.length; i++) {
-                if (openSet[i].f < openSet[lowestIndex].f) {
-                    lowestIndex = i;
-                }
+    if (openSet.length > 0) {
+        // keep going
+        var lowestIndex = 0;
+        for (var i = 0; i < openSet.length; i++) {
+            if (openSet[i].f < openSet[lowestIndex].f) {
+                lowestIndex = i;
             }
-            var current = openSet[lowestIndex];
-            console.log(current)
+        }
+        var current = openSet[lowestIndex];
+        console.log(current)
 
-            draw_bot(0, current.x, current.y);
+        for (var i = 0; i < openSet.length; i++) {
+            draw_bot(0, openSet[i].x, openSet[i].y);
+        }
 
-
-            if (current == end) {
-                var stepCount = 0;
-                console.log("DONE!");
-                path = [];
-                var temp = current;
-                path.push(temp);
-                while (temp.previous) {
-                  path.push(temp.previous);
-                  temp = temp.previous;
-                  stepCount++;
-                  draw_bot(2, temp.x, temp.y);
-                }
-                draw_bot(2, current.x, current.y);
-                console.log("Step Count = " + stepCount);
-                noLoop();
-            }
+        for (var i = 0; i < closeSet.length; i++) {
+            draw_bot(0, closeSet[i].x, closeSet[i].y);
+        }
 
 
-            removeFromArray(openSet, current);
-            closeSet.push(current);
-            // Neighbor Code
-            var neighbors = current.neighbors;
-            for (var i = 0; i < neighbors.length; i++) {
-                var neighbor = neighbors[i];
+        if (current == end) {
+            noLoop();
+        }
 
-                if (!closeSet.includes(neighbor)){
-                    // Counting the amount of g/steps
-                    var tempSteps = current.g + 1;
+        removeFromArray(openSet, current);
+        closeSet.push(current);
 
-                    if (openSet.includes(neighbor)) {
-                        if (tempSteps < neighbor.g) {
-                            neighbor.g = tempSteps;
-                        }
-                    }
-                    else {
+        // Neighbor Code
+        var neighbors = current.neighbors;
+        for (var i = 0; i < neighbors.length; i++) {
+            var neighbor = neighbors[i];
+
+            if (!closeSet.includes(neighbor)){
+                // Counting the amount of g/steps
+                var tempSteps = current.g + 1;
+
+                if (openSet.includes(neighbor)) {
+                    if (tempSteps < neighbor.g) {
                         neighbor.g = tempSteps;
-                        openSet.push(neighbor);
                     }
-
-                    neighbor.h = heuristic(neighbor, end);
-                    neighbor.f = neighbor.g + neighbor.h;
-                    neighbor.previous = current;
                 }
+                else {
+                    neighbor.g = tempSteps;
+                    openSet.push(neighbor);
+                }
+
+                neighbor.h = heuristic(neighbor, end);
+                neighbor.f = neighbor.g + neighbor.h;
+                neighbor.previous = current;
             }
         }
-        else {
-            // no solution
+        var stepCount = 0;
+        console.log("DONE!");
+        path = [];
+        var temp = current;
+        path.push(temp);
+        while (temp.previous) {
+            path.push(temp.previous);
+            temp = temp.previous;
+            stepCount++;
+            draw_bot(2, temp.x, temp.y);
         }
+        draw_bot(2, current.x, current.y);
+        console.log("Step Count = " + stepCount);
+    }
+    else {
+            // no solution
+    }
 
     // OBE:
     // Use JS Canvas's draw fcn, instead of P5's image(), to avoid CORS error.
