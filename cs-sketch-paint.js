@@ -43,19 +43,15 @@ function spot(i, j) {
         var j = this.y;
         if (i + 1 < g_grid.wid && grid[j][i + 1] != null) {
             this.neighbors.push(grid[j][i + 1]);
-            console.log("right")
         }
         if (i - 1 > 0 && grid[j][i - 1] != null) {
             this.neighbors.push(grid[j][i - 1]);
-            console.log("left")
         }
         if (j + 1 < g_grid.hgt && grid[j + 1][i] != null) {
             this.neighbors.push(grid[j + 1][i]);
-            console.log("bot")
         }
         if (j - 1 > 0 && grid[j - 1][i] != null) {
             this.neighbors.push(grid[j - 1][i]);
-            console.log("top")
         }
     }
 }
@@ -171,11 +167,9 @@ function draw_sprite_in_cell( rsprite_id, rx, ry ) // wraps in x,y ifn.
     grid[ry][rx] = new spot(rx, ry);
     console.log(grid[ry][rx])
 
-    if (rx == 35 && ry == 27) {
+    if (rx == 5 && ry == 27) {
         for (var i = 0; i < grid.length; i++) {
             for (var j = 0; j < grid[0].length; j++) {
-                console.log(i)
-                console.log(j)
                 if (grid[i][j] != null) {
                     grid[i][j].addNeightbors(grid);
                     console.log(grid[i][j]);
@@ -189,6 +183,20 @@ function draw_sprite_in_cell( rsprite_id, rx, ry ) // wraps in x,y ifn.
         openSet.push(start);
     }
 }
+
+function draw_bot(rsprite_id, rx, ry) {
+    console.log("(p5 draw_bot ", rsprite_id, rx, ry, " )");
+    let sprite_ob = get_sprite_by_id(rsprite_id);
+    let pix_ob = grid_to_pix(rx, ry);
+    let ctx = g_p5_cnv.canvas.getContext('2d'); // get html toolbox to draw.
+    ctx.drawImage(sprite_ob.img,
+        sprite_ob.sheet_pix_x, sprite_ob.sheet_pix_y,
+        g_grid.cell_size, g_grid.cell_size,
+        pix_ob.x, pix_ob.y,
+        g_grid.cell_size, g_grid.cell_size);
+    console.log("end draw_bot)");
+}
+
 // ==================================================
 // =================== END New Maze Drawing Code ========
 // ==================================================
@@ -243,9 +251,10 @@ function draw()  // P5 Frame Re-draw Fcn, Called for Every Frame.
                 lowestIndex = i;
             }
         }
-
         var current = openSet[lowestIndex];
+        console.log(current)
 
+        draw_bot(0, current.x, current.y);
 
         if (current == end) {
             console.log("DONE!");
@@ -256,8 +265,8 @@ function draw()  // P5 Frame Re-draw Fcn, Called for Every Frame.
 
         // Neighbor Code
         var neighbors = current.neighbors;
-        for (var j = 0; i < neighbors.length; j++) {
-            var neighbor = neighbors[j];
+        for (var i = 0; i < neighbors.length; i++) {
+            var neighbor = neighbors[i];
 
             if (!closeSet.includes(neighbor)){
                 // Counting the amount of g/steps 
@@ -267,7 +276,8 @@ function draw()  // P5 Frame Re-draw Fcn, Called for Every Frame.
                     if (tempSteps < neighbor.g) {
                         neighbor.g = tempSteps;
                     }
-                } else {
+                }
+                else {
                     neighbor.g = tempSteps;
                     openSet.push(neighbor);
                 }
