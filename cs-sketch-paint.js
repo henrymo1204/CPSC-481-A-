@@ -112,7 +112,7 @@ function setup( ) // P5 Setup Fcn
     console.log( "p5 @: log says hello from P5 setup()." );
     g_grid = { cell_size:28, wid:36, hgt:28 };
     g_frame_cnt = 0; // Setup a P5 display-frame counter, to do anim
-    g_frame_mod = 6; // Update ever 'mod' frames.
+    g_frame_mod = 40; // Update ever 'mod' frames.
     g_stop = 1; // Go by default.
     g_sctrl = 0;
     g_l4job = { id:1 };
@@ -241,77 +241,78 @@ function draw()  // P5 Frame Re-draw Fcn, Called for Every Frame.
     if (!g_stop && (0 == g_frame_cnt % g_frame_mod))
     {
         //console.log( "p5 draw" );
-        move_bot_to_mouse( );
-        draw_update( );
-    }
+        //move_bot_to_mouse( );
+        //draw_update( );
 
-    if (openSet.length > 0) {
-        // keep going
-        var lowestIndex = 0;
-        for (var i = 0; i < openSet.length; i++) {
-            if (openSet[i].f < openSet[lowestIndex].f) {
-                lowestIndex = i;
+
+        if (openSet.length > 0) {
+            // keep going
+            var lowestIndex = 0;
+            for (var i = 0; i < openSet.length; i++) {
+                if (openSet[i].f < openSet[lowestIndex].f) {
+                    lowestIndex = i;
+                }
             }
-        }
-        var current = openSet[lowestIndex];
-        console.log(current)
+            var current = openSet[lowestIndex];
+            console.log(current)
 
-        for (var i = 0; i < openSet.length; i++) {
-            draw_bot(0, openSet[i].x, openSet[i].y);
-        }
+            for (var i = 0; i < openSet.length; i++) {
+                draw_bot(0, openSet[i].x, openSet[i].y);
+            }
 
-        for (var i = 0; i < closeSet.length; i++) {
-            draw_bot(0, closeSet[i].x, closeSet[i].y);
-        }
+            for (var i = 0; i < closeSet.length; i++) {
+                draw_bot(0, closeSet[i].x, closeSet[i].y);
+            }
 
 
-        if (current == end) {
-            noLoop();
-        }
+            if (current == end) {
+                noLoop();
+            }
 
-        removeFromArray(openSet, current);
-        closeSet.push(current);
+            removeFromArray(openSet, current);
+            closeSet.push(current);
 
-        // Neighbor Code
-        var neighbors = current.neighbors;
-        for (var i = 0; i < neighbors.length; i++) {
-            var neighbor = neighbors[i];
+            // Neighbor Code
+            var neighbors = current.neighbors;
+            for (var i = 0; i < neighbors.length; i++) {
+                var neighbor = neighbors[i];
 
-            if (!closeSet.includes(neighbor)){
-                // Counting the amount of g/steps
-                var tempSteps = current.g + 1;
+                if (!closeSet.includes(neighbor)){
+                    // Counting the amount of g/steps
+                    var tempSteps = current.g + 1;
 
-                if (openSet.includes(neighbor)) {
-                    if (tempSteps < neighbor.g) {
-                        neighbor.g = tempSteps;
+                    if (openSet.includes(neighbor)) {
+                        if (tempSteps < neighbor.g) {
+                            neighbor.g = tempSteps;
+                        }
                     }
-                }
-                else {
-                    neighbor.g = tempSteps;
-                    openSet.push(neighbor);
-                }
+                    else {
+                        neighbor.g = tempSteps;
+                        openSet.push(neighbor);
+                    }
 
-                neighbor.h = heuristic(neighbor, end);
-                neighbor.f = neighbor.g + neighbor.h;
-                neighbor.previous = current;
+                    neighbor.h = heuristic(neighbor, end);
+                    neighbor.f = neighbor.g + neighbor.h;
+                    neighbor.previous = current;
+                }
             }
+            var stepCount = 0;
+            console.log("DONE!");
+            path = [];
+            var temp = current;
+            path.push(temp);
+            while (temp.previous) {
+                path.push(temp.previous);
+                temp = temp.previous;
+                stepCount++;
+                draw_bot(2, temp.x, temp.y);
+            }
+            draw_bot(2, current.x, current.y);
+            console.log("Step Count = " + stepCount);
         }
-        var stepCount = 0;
-        console.log("DONE!");
-        path = [];
-        var temp = current;
-        path.push(temp);
-        while (temp.previous) {
-            path.push(temp.previous);
-            temp = temp.previous;
-            stepCount++;
-            draw_bot(2, temp.x, temp.y);
+        else {
+                // no solution
         }
-        draw_bot(2, current.x, current.y);
-        console.log("Step Count = " + stepCount);
-    }
-    else {
-            // no solution
     }
 
     // OBE:
