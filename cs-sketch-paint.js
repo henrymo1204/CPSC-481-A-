@@ -261,7 +261,7 @@ function draw()  // P5 Frame Re-draw Fcn, Called for Every Frame.
             }
 
             for (var i = 0; i < closeSet.length; i++) {
-                draw_bot(0, closeSet[i].x, closeSet[i].y);
+                draw_bot(3, closeSet[i].x, closeSet[i].y);
             }
 
 
@@ -307,7 +307,7 @@ function draw()  // P5 Frame Re-draw Fcn, Called for Every Frame.
                 path.push(temp.previous);
                 temp = temp.previous;
                 stepCount++;
-                draw_bot(3, temp.x, temp.y);
+                draw_bot(2, temp.x, temp.y);
             }
             draw_bot(2, current.x, current.y);
             console.log("Step Count = " + stepCount);
