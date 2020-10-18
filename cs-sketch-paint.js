@@ -67,10 +67,10 @@ function removeFromArray(arr, ele) {
     }
 }
 
-function heuristic(a, b) { // f(n) = g(n) + h(n) ... Manhattan (TaxiCab)
+function heuristic(start, end) { // f(n) = g(n) + h(n) ... Manhattan (TaxiCab)
     // Calculates the amount fo distance from start to end
     //var d = dist(start.i, start.j, end.i, end.j);
-    var d = (abs(a.x - b.x) + abs(a.y - b.y));
+    var d = (abs(start.x - end.x) + abs(start.y - end.y));
     return d;
 }
 
