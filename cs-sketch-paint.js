@@ -307,7 +307,7 @@ function draw()  // P5 Frame Re-draw Fcn, Called for Every Frame.
                 path.push(temp.previous);
                 temp = temp.previous;
                 stepCount++;
-                draw_bot(2, temp.x, temp.y);
+                draw_bot(3, temp.x, temp.y);
             }
             draw_bot(2, current.x, current.y);
             console.log("Step Count = " + stepCount);
