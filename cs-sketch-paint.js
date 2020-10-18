@@ -37,10 +37,10 @@ function spot(i, j) {
     this.f = 0;
     this.g = 0;
     this.h = 0;
-    this.neighbors = [];
-    this.previous = null;
+    this.neighbors = [];// list of neighbors
+    this.previous = null;// previous spot
 
-    this.addNeightbors = function (grid) {
+    this.addNeightbors = function (grid) { // add neighbor to the list
         var i = this.x;
         var j = this.y;
         if (i + 1 < g_grid.wid && grid[j][i + 1] != null) {
@@ -120,8 +120,8 @@ function setup( ) // P5 Setup Fcn
     let sz = g_grid.cell_size;
     let width = sz * g_grid.wid;
     let height = sz * g_grid.hgt;
-    grid = new Array(g_grid.hgt)
-    for (var i = 0; i < grid.length; i++) {
+    grid = new Array(g_grid.hgt) // create an array
+    for (var i = 0; i < grid.length; i++) { // create arrays inside the array
         grid[i] = new Array(g_grid.wid)
     }
     g_p5_cnv = createCanvas( width, height );  // Make a P5 canvas.
@@ -171,7 +171,7 @@ function draw_sprite_in_cell( rsprite_id, rx, ry ) // wraps in x,y ifn.
     grid[ry][rx] = new spot(rx, ry);
     console.log(grid[ry][rx])
 
-    if (rx == 5 && ry == 27) {
+    if (rx == 5 && ry == 27) { // find out all the neighbors for all the spots
         for (var i = 0; i < grid.length; i++) {
             for (var j = 0; j < grid[0].length; j++) {
                 if (grid[i][j] != null) {
@@ -181,8 +181,8 @@ function draw_sprite_in_cell( rsprite_id, rx, ry ) // wraps in x,y ifn.
             }
         }
 
-        start = grid[0][1];
-        end = grid[26][35];
+        start = grid[0][1]; // set start
+        end = grid[26][35]; // set end
 
         openSet.push(start);
     }
@@ -265,14 +265,14 @@ function draw()  // P5 Frame Re-draw Fcn, Called for Every Frame.
             }
 
 
-            if (current == end) {
+            if (current == end) { // end the loop when reach the end
                 noLoop();
             }
 
             removeFromArray(openSet, current);
             closeSet.push(current);
 
-            // Neighbor Code
+            // calculate the f, g, and h for all the neighbors
             var neighbors = current.neighbors;
             for (var i = 0; i < neighbors.length; i++) {
                 var neighbor = neighbors[i];
@@ -296,6 +296,8 @@ function draw()  // P5 Frame Re-draw Fcn, Called for Every Frame.
                     neighbor.previous = current;
                 }
             }
+
+            // draw the best path
             var stepCount = 0;
             console.log("DONE!");
             path = [];
@@ -309,9 +311,6 @@ function draw()  // P5 Frame Re-draw Fcn, Called for Every Frame.
             }
             draw_bot(2, current.x, current.y);
             console.log("Step Count = " + stepCount);
-        }
-        else {
-                // no solution
         }
     }
 
