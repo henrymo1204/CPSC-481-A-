@@ -31,15 +31,15 @@ var path;
 
 var g_l4job = { id: 1 }; // Put Lisp stuff f JS-to-access in ob; id to force ob.
 
-function spot(i, j) {
+// constructor for tile
+function tile(i, j) {
     this.x = i;
     this.y = j;
     this.f = 0;
     this.g = 0;
     this.h = 0;
     this.neighbors = [];// list of neighbors
-    this.previous = null;// previous spot
-
+    this.previous = null;// mother tile
     this.addNeightbors = function (grid) { // add neighbor to the list
         var i = this.x;
         var j = this.y;
@@ -58,10 +58,10 @@ function spot(i, j) {
     }
 }
 
-// helper function
-function removeFromArray(arr, elt) {
+// helper function to remove element from array
+function removeFromArray(arr, ele) {
     for (var i = arr.length - 1; i >= 0; i--) {
-        if (arr[i] == elt) {
+        if (arr[i] == ele) {
             arr.splice(i, 1);
         }
     }
@@ -168,7 +168,7 @@ function draw_sprite_in_cell( rsprite_id, rx, ry ) // wraps in x,y ifn.
                    pix_ob.x, pix_ob.y,
                      g_grid.cell_size, g_grid.cell_size );
     console.log("end draw_sprite_in_cell)");
-    grid[ry][rx] = new spot(rx, ry);
+    grid[ry][rx] = new tile(rx, ry);
     console.log(grid[ry][rx])
 
     if (rx == 5 && ry == 27) { // find out all the neighbors for all the spots
