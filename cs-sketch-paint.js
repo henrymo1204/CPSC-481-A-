@@ -1,3 +1,14 @@
+//Class Number: CPSC 481-04
+//Project Number and Name: Project 1, A* Search
+//Team Name: IDK_Guys
+//Team Members: Tommy Huynh, tommyh@csu.fullerton.edu
+//Juheng Mo,henrymo@csu.fullerton.edu
+//Calvin Nguyen,cnguyen808@csu.fullerton.edu
+//Chi (Michael) Lam, micheallam@csu.fullerton.edu
+
+//This file updates and draws the map and controls the bot's AI
+//Computes all different paths and creates a step count for the final path
+
 // cs-sketch.js; P5 key animation fcns.  // CF p5js.org/reference
 // Time-stamp: <2020-09-20 22:55:31 Chuck Siska>
 
