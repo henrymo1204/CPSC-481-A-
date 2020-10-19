@@ -1,20 +1,6 @@
 // cs-sketch.js; P5 key animation fcns.  // CF p5js.org/reference
 // Time-stamp: <2020-09-20 22:55:31 Chuck Siska>
 
-//Class Number: CPSC 481-04
-//Project Number and Name: Project 1, A* Search
-//Team Name: IDK_Guys
-//Team Members: Tommy Huynh, tommyh@csu.fullerton.edu
-//Juheng Mo,henrymo@csu.fullerton.edu
-//Calvin Nguyen,cnguyen808@csu.fullerton.edu
-//Chi (Michael) Lam, micheallam@csu.fullerton.edu
-
-//This file updates and draws the map and controls the bot's AI
-//Computes all different paths and creates a step count for the final path
-
-// cs-sketch.js; P5 key animation fcns.  // CF p5js.org/reference
-// Time-stamp: <2020-09-20 22:55:31 Chuck Siska>
-
 // ============================================================ Mods ====
 // 2020-02-10 16:42:24: Add btns.
 // 2020-02-09 16:55:21: Add btn onclick exported fn
@@ -42,8 +28,6 @@ var closeSet = [];
 var start;
 var end;
 var path;
-var current;
-var stack = [];
 
 var g_l4job = { id: 1 }; // Put Lisp stuff f JS-to-access in ob; id to force ob.
 
@@ -62,13 +46,13 @@ function tile(i, j) {
         if (i + 1 < g_grid.wid && grid[j][i + 1] != null) {
             this.neighbors.push(grid[j][i + 1]);
         }
-        if (i - 1 > 0 && grid[j][i - 1] != null) {
+        if (i - 1 >= 0 && grid[j][i - 1] != null) {
             this.neighbors.push(grid[j][i - 1]);
         }
         if (j + 1 < g_grid.hgt && grid[j + 1][i] != null) {
             this.neighbors.push(grid[j + 1][i]);
         }
-        if (j - 1 > 0 && grid[j - 1][i] != null) {
+        if (j - 1 >= 0 && grid[j - 1][i] != null) {
             this.neighbors.push(grid[j - 1][i]);
         }
     }
@@ -201,7 +185,6 @@ function draw_sprite_in_cell( rsprite_id, rx, ry ) // wraps in x,y ifn.
         end = grid[26][35]; // set end
 
         openSet.push(start);
-        current = null;
     }
 }
 
@@ -264,38 +247,21 @@ function draw()  // P5 Frame Re-draw Fcn, Called for Every Frame.
 
         if (openSet.length > 0) {
             // keep going
-            if (current == null) {
-                current = start;
+            var lowestIndex = 0;
+            for (var i = 0; i < openSet.length; i++) {
+                if (openSet[i].f < openSet[lowestIndex].f) {
+                    lowestIndex = i;
+                }
             }
-            else {
-                var temp = null
-                for (var i = 0; i < openSet.length; i++) {
-                    if (current.neighbors.includes(openSet[i])) {
-                        if (temp == null || temp.f > openSet[i].f) {
-                            temp = openSet[i];
-                        }
-                        //else if (openSet[i] != current.previous) {
-                            //lowestIndex = i;
-                        //}
-                    }
-                }
-                if (temp == null) {
-                    current = openSet[openSet.length - 1];
-                }
-                else {
-                    current = temp;
-                }
-
-            }
+            var current = openSet[lowestIndex];
             console.log(current)
-            console.log(stack)
 
             for (var i = 0; i < openSet.length; i++) {
-                draw_bot(3, openSet[i].x, openSet[i].y);
+                draw_bot(0, openSet[i].x, openSet[i].y);
             }
 
             for (var i = 0; i < closeSet.length; i++) {
-                draw_bot(0, closeSet[i].x, closeSet[i].y);
+                draw_bot(3, closeSet[i].x, closeSet[i].y);
             }
 
 
