@@ -3,6 +3,9 @@ Project Number and Name: Project 1, A* Search
 Team Name: IDK_Guys
 Team Members: Tommy Huynh, Michael Lam, Henry Mo, Calvin Nguyen
 
+Intro:
+A* algorithm
+
 Files Included:
 assets/
 draw-stuff.js -- has P5 draw_grid() functions
@@ -15,9 +18,13 @@ sprite-cells-28x28-a -- contains the images of the sprites used for the maze and
 Project Algorithm report.pdf -- report of the project and how it works
 0-README.txt -- explains the team name and contents of the zip file, also includes instructions on how to run the program
 
-Included Features: shows the current best path for the bot
-Missing Features: bot is not always moving sequentially through the board, but visited blocks show as such
+Included Features: shows the current best path for the bot. 
+  Shows visited and to potential tiles.
+  includes final step count.
+  
+Missing Features: bot is not shown to be returning to mom tile, it jumps back to the mom instead of sequentially moving back.
 
+No external requirements
 
 Installation: 
 0. Zip has all the necessary files
