@@ -15,7 +15,6 @@ sprite-cells-28x28-a -- contains the images of the sprites used for the maze and
 Project Algorithm report.pdf -- report of the project and how it works
 0-README.txt -- explains the team name and contents of the zip file, also includes instructions on how to run the program
 
-Intro:
 
 Installation: 
 0. Zip has all the necessary files
