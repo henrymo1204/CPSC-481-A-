@@ -1,29 +1,37 @@
-READNE: Notes on the HTML + JS + P5 + Jathp example + P1 Maze drawing
-Time-stamp: <2020-09-21 13:24:24 Chuck Siska>
-------------------------------------------------------------
+Class Number: CPSC 481-04
+Project Number and Name: Project 1, A* Search
+Team Name: IDK_Guys
+Team Members: Tommy Huynh, Michael Lam, Henry Mo, Calvin Nguyen
 
-Named "0-README.txt" with "0-" to get your attention.
-  (Abbrev 'JP' == Jathp.)
+Intro:
+A* algorithm
 
 Files Included:
-0-README.txt -- This file.
-Jathp.js -- The modified Javathcript.js file; for original use websearch.
-cs-sketch-paint.js -- Has P5 key animation fcns: setup() and draw() + my globals.
-  etc. as before,
-  And some revision of the globals (see the mods comments at the top).
-index-js-p5-jathp-5.html -- Main webpage in HTML + JS + JP.
-  Also has has the jp-draw-maze fcn in the html (at bottom)
-p5.js -- The P5 system; unmodified, from its github site.
 assets/
-  draw-stuff.js -- Has P5 draw_grid() fcn [simpler that JS drawing].
-  styles.css -- Cascading Style Sheet (CSS) micro-example.
+draw-stuff.js -- has P5 draw_grid() functions
+styles.css -- cascading style sheet(css)
+cs-sketch-paint.js -- has P5 key animation functions: setup() and draw() as well as algorithm for the bot
+jathp.js -- modified Javathcripot.js file
+index-js-p5-jathp-5.html -- main webpage in HTML + JS + JP
+p5.js -- the P5 system from its github site
+sprite-cells-28x28-a -- contains the images of the sprites used for the maze and bot
+Project Algorithm report.pdf -- report of the project and how it works
+0-README.txt -- explains the team name and contents of the zip file, also includes instructions on how to run the program
 
-Installation:
-  0. This zip includes all P5 and Jathp; browser already does HTML & JS.
-  1. Unzip the zip file into a folder.
-  2. Change directory into folder's js-p5-jathp-maze/.
-  3. Open your Broswer to an empty tab.
-  4. Drag index-js-p5-jathp-5.html into the tab & see it start to run.
-  6. See the grid maze created.
-  9. Open the Inspector-Console-Debugger pane with your F12 key.
-  10. Select the Console tab to see the console.log text output stream.
+Included Features: shows the current best path for the bot. 
+  Shows visited and to potential tiles.
+  includes final step count.
+  
+Missing Features: bot is not shown to be returning to mom tile, it jumps back to the mom instead of sequentially moving back.
+
+No external requirements
+
+Installation: 
+0. Zip has all the necessary files
+1. Unzip the file into a folder onto desired filepath
+2. Go into the folder’s directory
+3. Double click on the html file, and it should open up with your default browser
+4. Grid and maze created
+5. Press S to start the AI bot to run
+6. The bot will end once it finds the best(shortest) path to (35, 26)
+
